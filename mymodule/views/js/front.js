@@ -26,20 +26,31 @@
 * to avoid any conflicts with others containers.
 */
 
+$('.custom-btn').click((e) => {
 
-// Added e listener to btn
-const addToCart = $('.custom-btn');
+    const product_id = $(e.target).prev().val();
 
-addToCart.click((e) => {	
-    // After click first check if it's disabled
-    if ($(e.target).hasClass('disabled')) {
-        // If yes - remove action attr from it's parent (form) - avoid adding product to cart
-        $(e.target).parent().removeAttr('action');  
-    }
-    // Remove btn primary (hover problems) + add diabled class
-    $(e.target).removeClass("btn-primary").addClass("disabled")
-});
+    // Sent product id with post ajax request
+        $.ajax({
+            type: "POST",
+            url: ajax_link,
+            data: {
+                product_id: product_id,
+            },
+            success: function(response)
+            {
+                let jsonData = JSON.parse(response);
+                // Make button inactive if false (after first click).
+                if (jsonData.containsproduct === false) {
+                    $(e.target).parent().removeAttr('action');  
+                    $(e.target).removeClass("btn-primary").addClass("disabled");
+                }
+            }
+       });
 
+
+        
+})
 
 
 

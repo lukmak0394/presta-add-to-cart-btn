@@ -217,6 +217,16 @@ class Mymodule extends Module
     {
         $this->context->controller->addJS($this->_path.'/views/js/front.js');
         $this->context->controller->addCSS($this->_path.'/views/css/front.css');
+        
+         // Created link to controller
+         $link = new Link;
+         $ajax_link = $link->getModuleLink('mymodule','ajax');
+ 
+         // Ussed addJsDef method to pass link directly to JS file
+         Media::addJsDef(array(
+             "ajax_link" => $ajax_link
+         ));
+         
     }
 
     public function hookDisplayProductListReviews($params)
@@ -232,13 +242,13 @@ class Mymodule extends Module
                 'id_poduct' => $id_product,
             ]
         );
-
+        
         // Created if statment which returns tpl file if product with specific id isn't in cart.
         // If product with specific id exists in cart return tpl file with error msg
         if(Context::getContext()->cart->containsProduct($id_product)) {
             return $this->display(__FILE__,'productExists.tpl');
         } else {
-            return $this->display(__FILE__, 'addProduct.tpl');          
+            return $this->display(__FILE__, 'addProduct.tpl');   
         }
     
     }
